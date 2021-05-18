@@ -1,0 +1,62 @@
+% \begin{tikzpicture}
+%   \begin{axis}
+%     [
+%     boxplot/draw direction=y,
+%     xtick={1, 2},
+%     ylabel={\footnotesize Percentage (\%)},
+%     xticklabels={{\footnotesize Graphical Treatment}, {\footnotesize Textual Treatment}},
+%     height= 5cm
+%     ]
+%     \addplot+[fill=olive, fill opacity=0.7, draw=black,
+%     boxplot prepared={
+%       median=77.11,
+%       upper quartile=81.66,
+%       lower quartile=67.10,
+%       upper whisker=88.61,
+%       lower whisker=35.62
+%     },
+%     ] coordinates {};
+%     \addplot+[fill=teal, fill opacity=0.7, draw=black,
+%     boxplot prepared={
+%       median=72.46,
+%       upper quartile=82.93,
+%       lower quartile=69.72,
+%       upper whisker=93.48,
+%       lower whisker=46.15
+%     },
+%     ] coordinates {};
+%   \end{axis}
+% \end{tikzpicture}
+
+\begin{filecontents*}{data2.csv}
+35.62,49.28,51.35,63.29,65.75,66.67,66.67,67.53,67.61,67.61,71.74,72.73,73.24,77.11,77.65,79.01,79.41,79.45,80.49,81.4,81.93,82.5,82.67,85,85.33,85.71,88.61
+46.15,56.72,57.58,61.36,66.67,67.57,69.57,69.88,70.33,70.33,71.79,71.93,72.29,72.46,79.55,80,80.43,80.52,81.08,82.35,83.52,84,84.09,84.71,86.6,92.86,93.48
+\end{filecontents*}
+
+\begin{tikzpicture}
+    \pgfplotstableread[col sep=comma]{data2.csv}\csvdata
+    % Boxplot groups columns, but we want rows
+    \pgfplotstabletranspose\datatransposed{\csvdata} 
+    \begin{axis}[
+         boxplot/draw direction=y,
+        xtick={1, 2},
+        ylabel={\footnotesize Percentage (\%)},
+        xticklabels={{\footnotesize Graphical Treatment}, {\footnotesize Textual Treatment}},
+        height= 4cm,
+        width= 8cm,
+        % boxplot/draw direction = y,
+        % axis x line* = bottom,
+        % axis y line = left,
+        % enlarge y limits,
+        ymajorgrids,
+        % xtick = {1, 2},
+        % xticklabel style = {align=center, font=\small},
+        % xticklabels = {Graphical Treatment, Textual Treatment},
+        % ylabel = {Percentage (\%)},
+        ytick = {25, 40, 60, 80, 100}
+    ]
+        \foreach \n in {1,...,2} {
+            \addplot+[boxplot, fill, fill opacity=0.4, draw=black] table[y index=\n] {\datatransposed};
+        }
+    \end{axis}
+\end{tikzpicture}

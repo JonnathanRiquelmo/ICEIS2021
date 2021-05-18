@@ -1,0 +1,63 @@
+% \begin{tikzpicture}
+%   \begin{axis}
+%     [
+    % boxplot/draw direction=y,
+    % xtick={1, 2},
+    % ylabel={\footnotesize Time (minutes)},
+    % xticklabels={{\footnotesize Graphical Treatment}, {\footnotesize Textual Treatment}},
+    % height= 5cm
+%     ]
+%     \addplot+[fill=olive, fill opacity=0.7, draw=black,
+%     boxplot prepared={
+%       median=25.00,
+%       upper quartile=28.00,
+%       lower quartile=21.00,
+%       upper whisker=60.00,
+%       lower whisker=12.00
+%     },
+%     ] coordinates {};
+%     \addplot+[fill=teal, fill opacity=0.7, draw=black,
+%     boxplot prepared={
+%       median=33.00,
+%       upper quartile=43.00,
+%       lower quartile=27.00,
+%       upper whisker=60.00,
+%       lower whisker=15.00
+%     },
+%     ] coordinates {};
+%   \end{axis}
+% \end{tikzpicture}
+
+\begin{filecontents*}{data.csv}
+12,12,17,18,20,20,21,21,22,22,22,22,25,25,26,26,27,28,28,28,28,28,31,35,42,46,60
+15,16,18,18,20,20,26,28,28,28,30,30,32,33,35,36,38,38,38,41,45,48,56,57,58,60,60
+\end{filecontents*}
+
+\begin{tikzpicture}
+    \pgfplotstableread[col sep=comma]{data.csv}\csvdata
+    % Boxplot groups columns, but we want rows
+    \pgfplotstabletranspose\datatransposed{\csvdata} 
+    \begin{axis}[
+        boxplot/draw direction=y,
+        xtick={1, 2},
+        ylabel={\footnotesize Time (minutes)},
+        xticklabels={{\footnotesize Graphical Treatment}, {\footnotesize Textual Treatment}},
+        height= 4cm,
+        width= 8cm,
+        % boxplot/draw direction = y,
+        % axis x line* = bottom,
+        % axis y line = left,
+        % enlarge y limits,
+        ymajorgrids,
+        % xtick = {1, 2},
+        % xticklabel style = {align=center, font=\small},
+        % xticklabels = {Graphical Treatment, Textual Treatment},
+        % ylabel = {Time (minutes)},
+        ytick = {15, 30, 45, 60}
+    ]
+        \foreach \n in {1,...,2} {
+            \addplot+[boxplot, fill, fill opacity=0.4, draw=black] table[y index=\n] {\datatransposed};
+        }
+    \end{axis}
+\end{tikzpicture}
+
